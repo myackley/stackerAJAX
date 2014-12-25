@@ -104,30 +104,43 @@ var getUnanswered = function(tags) {
 
 
 // display the top answerers in .results
-
+var showAnswerers = function(answererUser) {
 	// clone template
+	var result = $('.templates .answerer').clone();
 
 	// enter data
+	var answererAvatar = result.find('.answerer-avatar img');
+	answererAvatar.attr('src', answererUser.user.profile_image);
+
+	var answererNameLink = result.find('.answerer-name a');
+	answererNameLink.attr('href', answererUser.user.link);
+	answererNameLink.text(answererUser.user.display_name);
+
+	var answererReputation = result.find('.answerer-reputation');
+	answererReputation.text(answererUser.user.reputation);
+
+	var answererPostCount = result.find('.answerer-postcount');
+	answererPostCount.text(answererUser.post_count);
+
+	var answererScore = result.find('.answerer-score');
+	answererScore.text(answererUser.score);
 
 	// return template
-
-
-// show search results in .search-results
-
-	// zero out results
-
+	return result;
+};
 
 // get data from StackOverflow
 var getAnswerers = function(tag) {
-	// build the request url
-	var requestURL = "http://api.stackexchange.com/2.2/tags/" + tag + "/top-answerers/";
 
 	// establish parameters
 	var request = {
-		tag:tag,
-		period:"all-time",
-		site:"stackoverflow"
+		tags: tag,
+		period: 'all_time',
+		site: 'stackoverflow'
 	};
+
+	// build the request url
+	var requestURL = "http://api.stackexchange.com/2.2/tags/"+request.tags+"/top-answerers/"+request.period;
 
 	var result = $.ajax({
 		url: requestURL,
@@ -135,12 +148,21 @@ var getAnswerers = function(tag) {
 		dataType: "jsonp",
 		type: "GET",
 	}).done(function(result) {
-		console.log("done");
+		// use the functions that already exist
+		var searchResults = showSearchResults(request.tags, result.items.length);
+		$('.search-results').html('');
+		$('.search-results').html(searchResults);
+
+		// call function to display top answerers results if "done"
+		$.each(result.items, function(i, item) {
+			var answerer = showAnswerers(item);
+			$('.results').append(answerer);
+		});
+
 	}).fail(function(jqXHR, error, errorThrown) {
-		console.log("fail");
+		// display error
+		var errorElem = showError(error);
+		$('.search-results').append(errorElem);
 	});
-
-	// call function to display top answerers results if "done"
-
-	// display error
+	
 };
