@@ -8,10 +8,14 @@ $(document).ready( function() {
 	});
 
 	$('.inspiration-getter').submit( function(event){
+		event.preventDefault();
 		// zero out results
+		$('.results').html('');
 
 		// get tag values
-	}
+		var tag = $(this).find("input[name='answerers']").val();
+		getAnswerers(tag);
+	});
 });
 
 // this function takes the question object returned by StackOverflow 
@@ -101,9 +105,11 @@ var getUnanswered = function(tags) {
 
 // display the top answerers in .results
 
-	// clear any past results
-
 	// clone template
+
+	// enter data
+
+	// return template
 
 
 // show search results in .search-results
@@ -112,10 +118,29 @@ var getUnanswered = function(tags) {
 
 
 // get data from StackOverflow
+var getAnswerers = function(tag) {
+	// build the request url
+	var requestURL = "http://api.stackexchange.com/2.2/tags/" + tag + "/top-answerers/";
 
 	// establish parameters
+	var request = {
+		tag:tag,
+		period:"all-time",
+		site:"stackoverflow"
+	};
+
+	var result = $.ajax({
+		url: requestURL,
+		data: request,
+		dataType: "jsonp",
+		type: "GET",
+	}).done(function(result) {
+		console.log("done");
+	}).fail(function(jqXHR, error, errorThrown) {
+		console.log("fail");
+	});
 
 	// call function to display top answerers results if "done"
 
 	// display error
-
+};
