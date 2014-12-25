@@ -6,6 +6,12 @@ $(document).ready( function() {
 		var tags = $(this).find("input[name='tags']").val();
 		getUnanswered(tags);
 	});
+
+	$('.inspiration-getter').submit( function(event){
+		// zero out results
+
+		// get tag values
+	}
 });
 
 // this function takes the question object returned by StackOverflow 
@@ -89,4 +95,27 @@ var getUnanswered = function(tags) {
 };
 
 
+
+
+
+
+// display the top answerers in .results
+
+	// clear any past results
+
+	// clone template
+
+
+// show search results in .search-results
+
+	// zero out results
+
+
+// get data from StackOverflow
+
+	// establish parameters
+
+	// call function to display top answerers results if "done"
+
+	// display error
 
